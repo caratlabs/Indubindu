@@ -1409,17 +1409,8 @@ body.dragging .drag-overlay { display: flex; }
   // Initialise Drive settings/UI on load
   loadDriveSettings();
   updateDriveUI();
-  // Attempt a silent reconnect if the user previously connected and entered a client id
-  window.addEventListener('load', () => {
-    const settings = getDriveSettings();
-    if (settings.clientId && settings.autoSave) {
-      const trySilent = () => {
-        if (typeof google === 'undefined' || !google.accounts?.oauth2) { setTimeout(trySilent, 400); return; }
-        requestDriveToken(false).then(() => ensureDriveFolder()).catch(() => {/* needs interactive connect */});
-      };
-      trySilent();
-    }
-  });
+  // Note: we intentionally do NOT auto-connect to Google Drive on page load.
+  // Connection is only initiated when the user clicks the Drive button and chooses "Connect Google Drive".
 
   // Maps the API model id to a friendly display name shown in loading/meta text
   const MODEL_LABELS = {
